@@ -1,4 +1,6 @@
 // Export your helper functions
+#import "@preview/wordometer:0.1.5": word-count-of
+
 #let hl = highlight
 #let abbrev(abbreviation, full, inline: true) = {
   [
@@ -8,7 +10,21 @@
 }
 
 // The main template function
-#let template(changelog: none, body) = [
+#let template(
+  title: "Document Title",
+  doc-type: "Template",
+  author: "Unknown Author",
+  email: "Unknown Email",
+  reviewers: (), // Accepts an array of strings
+  date: datetime.today(), // Automatically pulls today's date
+  doc-id: "TBD", // Must be set manually or via an external script
+  changelog: none,
+  references: none,
+  show-contents: true,
+  show-abbreviations: true,
+  show-lists: true,
+  body,
+) = [
   // ==========================================
   // MARK: PREAMBLE
   // ==========================================
@@ -48,30 +64,33 @@
   #counter(heading).update(0)
   #set heading(numbering: "I")
 
-  // Title page table
   #align(center)[
-    #text(size: 28pt, fill: rgb("#005dab"), weight: "bold")[Document Title]
+    // Insert the dynamic title
+    #text(size: 28pt, fill: rgb("#005dab"), weight: "bold")[#title]
     #table(
       align: left,
       columns: (auto, 2fr),
-      [*Document*], [Template],
-      [*Author*],
-      [#link("mailto:wfk20@bath.ac.uk")[Wenzel Kinsky (wfk20\@bath.ac.uk)]],
-      [*Reviewers*], [],
-      [*Created On*], [],
-      [*Words*], [],
-      [*Document Id*], [],
+      [*Document Type*], [#doc-type],
+      [*Author*], [#link("mailto:" + email)[#author (#email)]],
+      // Join the array of reviewers into a comma-separated string
+      [*Reviewers*], [#reviewers.join(", ")],
+      // Format the automated date
+      [*Created On*], [#date.display("[year]-[month]-[day]")],
+      // Automatically output the word count using wordometer
+      [*Words*], [#word-count-of(body).words],
+      [*Document Id*], [#doc-id],
     )
     // Insert Changelog
     #if changelog != none [
+      #text(size: 18pt, fill: rgb("#005dab"), weight: "bold")[Changelog]
       #changelog
     ]
   ]
   #pagebreak()
-
-  // Insert the contents
-  #outline(title: [Table of Contents])
-  #pagebreak()
+  #if show-contents [
+    #outline(title: [Table of Contents])
+    #pagebreak()
+  ]
 
   // Dynamic List of Figures
   #context [
@@ -79,7 +98,7 @@
     #let image-figs = query(figure.where(kind: image))
 
     // Only render the section if the query found at least one image
-    #if image-figs.len() > 0 [
+    #if { image-figs.len() > 0 and show-lists } [
       = List of Figures
       #outline(title: none, target: figure.where(kind: image))
     ]
@@ -91,22 +110,24 @@
     #let table-figs = query(figure.where(kind: table))
 
     // Only render the section if the query found at least one table
-    #if table-figs.len() > 0 [
+    #if { table-figs.len() > 0 and show-lists } [
       = List of Tables
       #outline(title: none, target: figure.where(kind: table))
     ]
   ]
   // Dynamic List of Abbreviations
-  = List of Abbreviations
   #context [
     #let acronym-data = query(<acronym>)
-    #table(
-      columns: (auto, 1fr),
-      align: left + horizon,
-      table.header([ *Abbreviation / Acronym* ], [ *Definition* ]),
-      // dynamically map over the metadata stored in main.typ
-      ..acronym-data.map(a => (a.value.abbrev, a.value.full)).flatten(),
-    )
+    #if {acronym-data.len() > 0 and show-abbreviations} [
+      = List of Abbreviations
+      #table(
+        columns: (auto, 1fr),
+        align: left + horizon,
+        table.header([ *Abbreviation / Acronym* ], [ *Definition* ]),
+        // dynamically map over the metadata stored in main.typ
+        ..acronym-data.map(a => (a.value.abbrev, a.value.full)).flatten(),
+      )
+    ]
   ]
   #pagebreak()
 
@@ -132,6 +153,5 @@
   counter(heading).update(0)
   set heading(numbering: "A.1", supplement: "")
 
-  // Render the appendix body here (No '#' needed)
   body
 }
