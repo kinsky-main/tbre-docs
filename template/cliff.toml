@@ -5,7 +5,7 @@
 [changelog]
 header = """
 #table(
-  columns: (auto, 1fr, auto),
+  columns: (auto, auto, auto, 1fr),
   align: left + horizon,
   table.header(
     [*Date*], [*Version*], [*Author*],
@@ -14,9 +14,18 @@ header = """
 """
 # Template for each commit
 body = """
-  {% for commit in commits %}\
-  [{{ commit.scope | default(value="ALL") }}], [{{ commit.message | split(pat="\n") | first }}], [{{ commit.author.timestamp | date(format="%d/%m/%y") }}],
-  {% endfor %}\
+  {% if releases is defined %}
+    {% for release in releases %}
+      {% for commit in release.commits %}\
+      [{{ commit.author.timestamp | date(format="%d/%m/%y") }}], \
+      [{{ release.version | default(value="Unreleased") }}], \
+      [{{ commit.author.name }}], \
+      [[{{ commit.scope | default(value="ALL") }}] {{ commit.message | split(pat="\n") | first }}],
+      {% endfor %}
+    {% endfor %}
+  {% else %}\
+    [-], [No commits yet], [-], [-],
+  {% endif %}\
 """
 footer = ")"
 # Remove leading and trailing whitespaces from the changelog's body.
