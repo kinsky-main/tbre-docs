@@ -23,11 +23,16 @@
   show-contents: true,
   show-abbreviations: true,
   show-lists: true,
+  auto-pagebreak: true,
   body,
 ) = [
   // ==========================================
   // MARK: PREAMBLE
   // ==========================================
+  #let pagebreak-mask() = {
+    if auto-pagebreak [#pagebreak()]
+    else {none}
+  }
   #set page(margin: (top: 2.8cm, rest: 2.5cm))
   #set text(font: "Roboto", size: 11pt)
   #show figure.where(kind: table): set figure.caption(position: top)
@@ -87,10 +92,10 @@
       #changelog
     ]
   ]
-  #pagebreak()
+  #pagebreak-mask()
   #if show-contents [
     #outline(title: [Table of Contents])
-    #pagebreak()
+    #pagebreak-mask()
   ]
 
   // Dynamic List of Figures
@@ -130,7 +135,7 @@
       )
     ]
   ]
-  #pagebreak()
+  #pagebreak-mask()
 
   // ==========================================
   // MARK: MAIN BODY SETUP
