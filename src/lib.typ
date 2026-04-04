@@ -31,6 +31,7 @@
   #set page(margin: (top: 2.8cm, rest: 2.5cm))
   #set text(font: "Roboto", size: 11pt)
   #show figure.where(kind: table): set figure.caption(position: top)
+  #show figure.caption: set align(left)
   #set page(numbering: "i")
   #show table: set par(justify: false)
 
