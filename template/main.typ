@@ -1,10 +1,10 @@
 #import "@local/tbre-doc:0.1.0": template, appendix, abbrev, hl
 
-
+// Input credentials from environment variable (if set) at initialisation of template for author information
 #let creds-string = sys.inputs.at("credentials", default: none)
 
-#let author-name = "Unknown Author"
-#let author-email = "Unknown Email"
+#let author-name = "Wenzel Kinsky"
+#let author-email = "wfk20@bath.ac.uk"
 
 #if creds-string != none {
   let parsed = json(bytes(creds-string))
@@ -13,7 +13,7 @@
 }
 
 #show: template.with(
-  title: "AI Compute Platform Description",
+  title: "TBRe Documentation Template",
   doc-type: "Documentation",
   author: author-name,
   email: author-email,
@@ -23,12 +23,9 @@
   changelog: include "changelog.typ",
   references: bibliography("refs.bib"),
   show-abbreviations: true,
-  show-contents: true,
-  show-lists: true,
+  show-contents: false,
+  show-lists: false,
 )
-
-// You can log your abbreviations anywhere in the content or out of line here
-#abbrev("TBRe", "Team Bath Racing Electric", inline: false)
 
 = Formatting Guidelines
 
@@ -51,7 +48,7 @@ Figures should always be mentioned in the text by referring to their figure numb
 
 === Graphics
 
-Try to reduce file sizes of graphics as much as possible to prevent the repository from becoming too large. Ideally use #link("https://git-lfs.com/", `git-lfs`) to manage large files in git by running the folliowing commands:
+Try to reduce file sizes of graphics as much as possible to prevent the repository from becoming too large. Ideally use #link("https://git-lfs.com/", `git-lfs`) to manage large files in git by running the following commands:
 
 ```sh
 git lfs install
@@ -64,7 +61,7 @@ Image figures can be scaled as needed by adjusting the parameters of the `#image
 
 #figure(
   image("./images/ga_2026_mar.png"),
-  caption: [A screenshot of the #abbrev("GA", "General Assembly") for a meeting in March 2026],
+  caption: [A screenshot of the General Assembly for a meeting in March 2026],
 ) <ga-figure>
 
 #v(6pt)
