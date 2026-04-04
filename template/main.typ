@@ -25,6 +25,7 @@
   show-abbreviations: true,
   show-contents: false,
   show-lists: false,
+  auto-pagebreak: true,
 )
 
 = Formatting Guidelines

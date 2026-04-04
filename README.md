@@ -11,6 +11,15 @@ To compile this document locally, you will need:
 1. **Typst CLI**: For compiling the document into a PDF.
 2. **git-cliff**: A command-line tool that generates changelogs from your Git repository history using conventional commits [2, 3].
 
+# Initialising the Template
+
+To use this template after installation simply run the following commands.
+```sh
+typst init '@local/tbre-doc:0.1.0' name-of-your-project
+cd name-of-your-project
+typst watch main.typ
+```
+
 ## Installing as a Local Package from a Remote Repository
 To use this template across multiple projects without copying the source files every time, you can install it into Typst's local package directory directly from the remote repository.
 
