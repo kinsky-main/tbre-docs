@@ -11,13 +11,23 @@ To compile this document locally, you will need:
 1. **Typst CLI**: For compiling the document into a PDF.
 2. **git-cliff**: A command-line tool that generates changelogs from your Git repository history using conventional commits [2, 3].
 
-# Initialising the Template
+## Initialising the Template
 
 To use this template after installation simply run the following commands.
 ```sh
 typst init '@local/tbre-doc:0.1.0' name-of-your-project
 cd name-of-your-project
 typst watch main.typ
+```
+
+### Git Recommendation
+
+In order to reduce repository bloat enable git LFS to track the image files used in figures.
+```sh
+git lfs install
+git lfs track "*.png" "*.jpg" "*.jpeg" "*.svg"
+git add .gitattributes
+git commit -m "Configure Git LFS to track image files"
 ```
 
 ## Installing as a Local Package from a Remote Repository
@@ -36,7 +46,7 @@ For example, on Linux/macOS:
 ```bash
 mkdir -p ~/.local/share/typst/packages/local/tbre-doc/0.1.0
 git clone <YOUR_REMOTE_REPO_URL> ~/.local/share/typst/packages/local/tbre-doc/0.1.0
-
+```
 ## Project Structure
 Ensure your project directory looks like this:
 ```text
@@ -52,3 +62,4 @@ Ensure your project directory looks like this:
 	├── images/      # Image assets used by the template
 	├── main.typ     # Main template/report content
 	└── refs.bib     # Bibliography entries
+```
