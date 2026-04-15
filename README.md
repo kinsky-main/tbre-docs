@@ -4,7 +4,7 @@ A highly customizable, locally deployed Typst template designed for the TBRe doc
 
 This template features automatic list-of-abbreviations generation and an automated changelog powered by `git-cliff` [1].
 
-Use (git-cliff)[https://git-cliff.org/] to generate changelog.typ from your git commit history following the Conventional Commits specification TYPE(CHAPTER): COMMIT MESSAGE
+Use [git-cliff](https://git-cliff.org/) to generate changelog.typ from your git commit history following the Conventional Commits specification TYPE(CHAPTER): COMMIT MESSAGE
 
 ## Prerequisites
 To compile this document locally, you will need:
